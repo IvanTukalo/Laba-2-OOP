@@ -1,0 +1,14 @@
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\bin\Debug\net6.0\Abrikos Shiza 2.exe
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\bin\Debug\net6.0\Abrikos Shiza 2.deps.json
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\bin\Debug\net6.0\Abrikos Shiza 2.runtimeconfig.json
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\bin\Debug\net6.0\Abrikos Shiza 2.dll
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\bin\Debug\net6.0\Abrikos Shiza 2.pdb
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.AssemblyInfoInputs.cache
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.AssemblyInfo.cs
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.csproj.CoreCompileInputs.cache
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.dll
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\refint\Abrikos Shiza 2.dll
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.pdb
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\Abrikos Shiza 2.genruntimeconfig.cache
+C:\Users\Sevirus\Desktop\Abrikos Shiza 2\obj\Debug\net6.0\ref\Abrikos Shiza 2.dll
