@@ -1,16 +1,108 @@
 ﻿using System;
 using System.Text;
-using System.Numerics;
-using System.Collections.Generic;
-using System.Linq;
 
 partial class Program
 {
     static void DoBlock_1()
     {
+        Console.WriteLine("Введіть першу матрицю у вигляді чисел, розділених пробілами і символами переходу на новий рядок:");
+        var matrix1 = ReadMatrix();
 
+        Console.WriteLine("\nВведіть другу матрицю у вигляді чисел, розділених пробілами і символами переходу на новий рядок:");
+        var matrix2 = ReadMatrix();
+
+        Console.WriteLine("\nВведені матриці:");
+        Console.WriteLine("Матриця 1:");
+        Console.WriteLine(matrix1);
+        Console.WriteLine("Матриця 2:");
+        Console.WriteLine(matrix2);
+
+        Console.WriteLine("\n=== Виберіть дію ===");
+        Console.WriteLine("1 - Додати матриці");
+        Console.WriteLine("2 - Помножити матриці");
+        Console.WriteLine("3 - Транспонувати першу матрицю");
+        Console.WriteLine("4 - Транспонувати другу матрицю");
+        Console.WriteLine("5 - Обчислити визначник першої матриці");
+        Console.WriteLine("6 - Обчислити визначник другої матриці");
+        Console.WriteLine("0 - Вихід");
+
+        while (true)
+        {
+            Console.Write("\nВаш вибір: ");
+            string choice = Console.ReadLine();
+
+            try
+            {
+                switch (choice)
+                {
+                    case "1":
+                        Console.WriteLine("\nРезультат додавання:");
+                        Console.WriteLine(matrix1 + matrix2);
+                        break;
+                    case "2":
+                        Console.WriteLine("\nРезультат множення:");
+                        Console.WriteLine(matrix1 * matrix2);
+                        break;
+                    case "3":
+                        Console.WriteLine("\nТранспонована перша матриця:");
+                        Console.WriteLine(matrix1.GetTransponedCopy());
+                        break;
+                    case "4":
+                        Console.WriteLine("\nТранспонована друга матриця:");
+                        Console.WriteLine(matrix2.GetTransponedCopy());
+                        break;
+                    case "5":
+                        Console.WriteLine("\nВизначник першої матриці:");
+                        Console.WriteLine(matrix1.CalcDeterminant());
+                        break;
+                    case "6":
+                        Console.WriteLine("\nВизначник другої матриці:");
+                        Console.WriteLine(matrix2.CalcDeterminant());
+                        break;
+                    case "0":
+                        Console.WriteLine("\nДякуємо за користування програмою!");
+                        return;
+                    default:
+                        Console.WriteLine("Некоректний вибір. Спробуйте ще раз.");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Помилка: {ex.Message}");
+            }
+        }
+    }
+    static MyMatrix ReadMatrix()
+    {
+        while (true)
+        {
+            Console.Write("Введіть матрицю (порожній рядок для завершення вводу):\n");
+            string input = ReadMultilineInput();
+            try
+            {
+                return new MyMatrix(input);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Помилка створення матриці: {ex.Message}");
+                Console.WriteLine("Спробуйте ще раз.");
+            }
+        }
     }
 
+    static string ReadMultilineInput()
+    {
+        var inputBuilder = new System.Text.StringBuilder();
+        string line;
+
+        while (!string.IsNullOrWhiteSpace(line = Console.ReadLine()))
+        {
+            inputBuilder.AppendLine(line);
+        }
+
+        return inputBuilder.ToString();
+    }
     static void DoBlock_2()
     {
         MyTime t1 = GetTime("t1");
@@ -23,21 +115,39 @@ partial class Program
 
         Console.WriteLine("Час t1: " + t1);
         Console.WriteLine("Час t2: " + t2);
-
-        // Тестування різниці в секундах
         Console.WriteLine("Різниця між t1 і t2: " + MyTime.Difference(t1, t2) + " секунд");
-
-        // Додавання секунди, хвилини та години
         Console.WriteLine("t1 + 1 секунда: " + t1.AddOneSecond());
         Console.WriteLine("t1 + 1 хвилина: " + t1.AddOneMinute());
         Console.WriteLine("t1 + 1 година: " + t1.AddOneHour());
+        Console.WriteLine("Виберіть метод введення:");
+        Console.WriteLine("1. Введення вручну");
+        Console.WriteLine("2. Випадковий вибір");
+        int choice = int.Parse(Console.ReadLine());
 
-        // Додавання довільної кількості секунд
-        Console.WriteLine("t1 + 5000 секунд: " + t1.AddSeconds(5000));
+        int totalSeconds = 0;
 
-        // Визначення, яка зараз пара
+        if (choice == 1)
+        {
+            // Користувач вводить кількість секунд вручну
+            Console.WriteLine("Введіть кількість секунд:");
+            totalSeconds = int.Parse(Console.ReadLine());
+        }
+        else if (choice == 2)
+        {
+            // Користувач вводить мінімум і максимум для випадкового вибору
+            Console.WriteLine("Введіть мінімум для секунд:");
+            int minSeconds = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введіть максимум для секунд:");
+            int maxSeconds = int.Parse(Console.ReadLine());
+
+            Random rand = new Random();
+            totalSeconds = rand.Next(minSeconds, maxSeconds);
+            Console.WriteLine($"Випадковий вибір: {totalSeconds} секунд");
+        }
+        Console.WriteLine("t1 + " + totalSeconds + " секунд: " + t1.AddSeconds(totalSeconds));
         Console.WriteLine("Зараз: " + now + " - " + MyTime.WhatLesson(now));
     }
+
     static MyTime GetTime(string label)
     {
         Console.WriteLine($"Як ви хочете задати час для {label}? (1 - вручну, 2 - випадковий):");
@@ -57,13 +167,13 @@ partial class Program
             return MyTime.GenerateRandomTime();
         }
     }
+
     class MyTime
     {
         public int Hour { get; private set; }
         public int Minute { get; private set; }
         public int Second { get; private set; }
 
-        // Конструктор з валідацією значень
         public MyTime(int hour, int minute, int second)
         {
             if (hour < 0 || hour >= 24 || minute < 0 || minute >= 60 || second < 0 || second >= 60)
@@ -74,31 +184,11 @@ partial class Program
             Second = second;
         }
 
-        // Метод перетворення в рядок "h:mm:ss"
-        public override string ToString()
-        {
-            return $"{Hour}:{Minute:D2}:{Second:D2}";
-        }
-
-        // Перетворює час у кількість секунд від початку доби
-
-        public int Hour { get; private set; }
-        public int Minute { get; private set; }
-        public int Second { get; private set; }
-
-        public MyTime(int hour, int minute, int second)
-        {
-            Hour = (hour + 24) % 24;  // Година в діапазоні [0, 23]
-            Minute = (minute + 60) % 60;
-            Second = (second + 60) % 60;
-        }
-
         public override string ToString()
         {
             return $"{Hour:D2}:{Minute:D2}:{Second:D2}";
         }
 
-        // Статичний метод для вводу часу з консолі
         public static MyTime InputFromConsole(string label)
         {
             Console.WriteLine($"Введіть час для {label} (година хвилина секунда, через пробіл):");
@@ -109,7 +199,6 @@ partial class Program
             return new MyTime(h, m, s);
         }
 
-        // Статичний метод для генерації випадкового часу
         public static MyTime GenerateRandomTime()
         {
             Random random = new Random();
@@ -118,15 +207,15 @@ partial class Program
             int s = random.Next(0, 60);
             return new MyTime(h, m, s);
         }
+
         public static int TimeSinceMidnight(MyTime t)
         {
             return t.Hour * 3600 + t.Minute * 60 + t.Second;
         }
 
-        // Перетворює кількість секунд у об'єкт MyTime
         public static MyTime TimeSinceMidnight(int seconds)
         {
-            const int secPerDay = 86400; // 24 * 60 * 60
+            const int secPerDay = 86400;
             seconds %= secPerDay;
             if (seconds < 0) seconds += secPerDay;
 
@@ -137,38 +226,21 @@ partial class Program
             return new MyTime(h, m, s);
         }
 
-        // Додає одну секунду до об'єкта
-        public MyTime AddOneSecond()
-        {
-            return AddSeconds(1);
-        }
+        public MyTime AddOneSecond() => AddSeconds(1);
+        public MyTime AddOneMinute() => AddSeconds(60);
+        public MyTime AddOneHour() => AddSeconds(3600);
 
-        // Додає одну хвилину до об'єкта
-        public MyTime AddOneMinute()
-        {
-            return AddSeconds(60);
-        }
-
-        // Додає одну годину до об'єкта
-        public MyTime AddOneHour()
-        {
-            return AddSeconds(3600);
-        }
-
-        // Додає довільну кількість секунд (можуть бути від'ємні)
         public MyTime AddSeconds(int seconds)
         {
             int totalSeconds = TimeSinceMidnight(this) + seconds;
             return TimeSinceMidnight(totalSeconds);
         }
 
-        // Обчислює різницю між двома часами (у секундах)
         public static int Difference(MyTime t1, MyTime t2)
         {
             return TimeSinceMidnight(t1) - TimeSinceMidnight(t2);
         }
 
-        // Визначає, яка пара зараз триває, або коли йде перерва
         public static string WhatLesson(MyTime t)
         {
             int totalSeconds = TimeSinceMidnight(t);
@@ -212,7 +284,7 @@ partial class Program
         do
         {
             Console.WriteLine("-Для виконання блоку 1 - MyMatrix");
-            Console.WriteLine("-Для виконання блоку 2 - my_frac ООП");
+            Console.WriteLine("-Для виконання блоку 2 - my_time ООП");
 
             choice = int.Parse(Console.ReadLine());
 
