@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "6pAoOvTr3QZaJqVlQnZFCklZXWIXtiG8xPZRNGxTCDuUowfIgO2dCv2QvTo/th60o/c6tOqIDfFurcxRJ5vx8Q==",
+  "dgSpecHash": "QhXBIaf8+Eo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Sevirus\\Desktop\\Abrikos Shiza 2\\Abrikos Shiza 2.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Laplace\\Desktop\\Abrikos Shiza 2\\Abrikos Shiza 2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Laplace\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.36\\microsoft.windowsdesktop.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\Laplace\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.36\\microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\Laplace\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.36\\microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\Laplace\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.36\\microsoft.netcore.app.host.win-x64.6.0.36.nupkg.sha512"
+  ],
   "logs": []
 }

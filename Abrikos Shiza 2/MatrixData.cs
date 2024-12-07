@@ -5,65 +5,94 @@ public partial class MyMatrix
 {
     private double[,] matrix;
 
+    // Конструктор копіювання
+    public MyMatrix(MyMatrix other)
+    {
+        if (other == null)
+            throw new ArgumentNullException(nameof(other));
+        InitializeMatrix(other.matrix);
+    }
+
     // Конструктор з двовимірного масиву
     public MyMatrix(double[,] data)
     {
-        matrix = (double[,])data.Clone();
+        if (data == null)
+            throw new ArgumentNullException(nameof(data));
+        InitializeMatrix(data);
     }
 
     // Конструктор з зубчастого масиву
     public MyMatrix(double[][] data)
     {
-        int rows = data.Length;
-        int cols = data[0].Length;
-
-        foreach (var row in data)
-        {
-            if (row.Length != cols)
-                throw new ArgumentException("Масив не є прямокутним.");
-        }
-
-        matrix = new double[rows, cols];
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                matrix[i, j] = data[i][j];
+        if (data == null)
+            throw new ArgumentNullException(nameof(data));
+        ValidateJaggedArray(data);
+        matrix = new double[data.Length, data[0].Length];
+        FillMatrixFromJaggedArray(data);
     }
 
     // Конструктор з масиву рядків
     public MyMatrix(string[] rows)
     {
-        int rowCount = rows.Length;
-        int colCount = rows[0].Split(' ').Length;
+        if (rows == null || rows.Length == 0)
+            throw new ArgumentException("Рядки не можуть бути порожніми.");
+        matrix = ParseRowsToMatrix(rows);
+    }
+        
+    // Конструктор з одного рядка, який делегує конструктору з масиву рядків
+    public MyMatrix(string input) : this(
+        input?.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            throw new ArgumentException("Вхідні дані не можуть бути порожніми.");
+    }
 
-        matrix = new double[rowCount, colCount];
-        for (int i = 0; i < rowCount; i++)
+    // Приватний метод для ініціалізації матриці
+    private void InitializeMatrix(double[,] source)
+    {
+        int rows = source.GetLength(0);
+        int cols = source.GetLength(1);
+        matrix = new double[rows, cols];
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                matrix[i, j] = source[i, j];
+    }
+
+    // Приватний метод для перевірки зубчастого масиву
+    private void ValidateJaggedArray(double[][] data)
+    {
+        int cols = data[0].Length;
+        foreach (var row in data)
         {
-            var elements = rows[i].Split(' ');
-            if (elements.Length != colCount)
-                throw new ArgumentException("Кількість чисел у рядках відрізняється.");
-
-            for (int j = 0; j < colCount; j++)
-                matrix[i, j] = double.Parse(elements[j]);
+            if (row.Length != cols)
+                throw new ArgumentException("Масив не є прямокутним.");
         }
     }
 
-    // Конструктор з одного рядка
-    public MyMatrix(string input)
+    // Приватний метод для заповнення матриці із зубчастого масиву
+    private void FillMatrixFromJaggedArray(double[][] data)
     {
-        var rows = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < data.Length; i++)
+            for (int j = 0; j < data[i].Length; j++)
+                matrix[i, j] = data[i][j];
+    }
+
+    // Приватний метод для парсингу рядків у матрицю
+    private double[,] ParseRowsToMatrix(string[] rows)
+    {
         int rowCount = rows.Length;
         int colCount = rows[0].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length;
 
-        matrix = new double[rowCount, colCount];
+        var result = new double[rowCount, colCount];
         for (int i = 0; i < rowCount; i++)
         {
             var elements = rows[i].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             if (elements.Length != colCount)
                 throw new ArgumentException("Матриця не є прямокутною.");
-
             for (int j = 0; j < colCount; j++)
-                matrix[i, j] = double.Parse(elements[j]);
+                result[i, j] = double.Parse(elements[j]);
         }
+        return result;
     }
 
     // Властивості
