@@ -3,7 +3,9 @@ using System.Text;
 
 public partial class MyMatrix
 {
-    private double[,] matrix;
+    protected double[,] matrix;
+    protected double? ChanceDeterminant = null;
+    public bool isMod = true;
 
     // Конструктор копіювання
     public MyMatrix(MyMatrix other)
@@ -37,11 +39,11 @@ public partial class MyMatrix
         if (rows == null || rows.Length == 0)
             throw new ArgumentException("Рядки не можуть бути порожніми.");
         matrix = ParseRowsToMatrix(rows);
+        InvalidateCache();// Очищення кешу після зміни
     }
-        
+
     // Конструктор з одного рядка, який делегує конструктору з масиву рядків
-    public MyMatrix(string input) : this(
-        input?.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+    public MyMatrix(string input) : this(input?.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
     {
         if (string.IsNullOrWhiteSpace(input))
             throw new ArgumentException("Вхідні дані не можуть бути порожніми.");
@@ -56,6 +58,7 @@ public partial class MyMatrix
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
                 matrix[i, j] = source[i, j];
+        InvalidateCache();// Очищення кешу після зміни
     }
 
     // Приватний метод для перевірки зубчастого масиву
@@ -75,6 +78,7 @@ public partial class MyMatrix
         for (int i = 0; i < data.Length; i++)
             for (int j = 0; j < data[i].Length; j++)
                 matrix[i, j] = data[i][j];
+        InvalidateCache();// Очищення кешу після зміни
     }
 
     // Приватний метод для парсингу рядків у матрицю
@@ -93,6 +97,7 @@ public partial class MyMatrix
                 result[i, j] = double.Parse(elements[j]);
         }
         return result;
+        InvalidateCache();// Очищення кешу після зміни
     }
 
     // Властивості
@@ -114,12 +119,23 @@ public partial class MyMatrix
         {
             ValidateIndices(row, col);
             matrix[row, col] = value;
+            InvalidateCache(); // Очищення кешу після зміни
         }
+    }
+    public void InvalidateCache()
+    {
+        determinantCache = null;
+        ChanceDeterminant = null; // Якщо використовується альтернативний кеш
+        isMod = true;             // Оновлюємо стан матриці
     }
 
     // Getter/Setter у Java-стилі
     public double GetElement(int row, int col) => this[row, col];
-    public void SetElement(int row, int col, double value) => this[row, col] = value;
+    public void SetElement(int row, int col, double value)
+    {
+        this[row, col] = value; 
+        InvalidateCache();// Очищення кешу після зміни
+    } 
 
     // Переозначення ToString
     public override string ToString()

@@ -1,5 +1,6 @@
 ﻿public partial class MyMatrix
 {
+    
     // Оператор додавання
     public static MyMatrix operator +(MyMatrix a, MyMatrix b)
     {
@@ -51,10 +52,13 @@
         if (Height != Width)
             throw new InvalidOperationException("Визначник обчислюється тільки для квадратних матриць.");
 
-        if (determinantCache != null)
+        // Якщо визначник уже обчислений і матриця не модифікована, повертаємо кешоване значення
+        if (determinantCache.HasValue && !isMod)
             return determinantCache.Value;
 
+        // Обчислення визначника
         determinantCache = CalculateDeterminantInternal((double[,])matrix.Clone());
+        isMod = false; // Скидаємо прапорець модифікації
         return determinantCache.Value;
     }
 
@@ -92,4 +96,35 @@
         }
         return minor;
     }
+
+    public static void ModifyMatrix(MyMatrix matrix)
+    {
+        while (true)
+        {
+            Console.WriteLine("\nПоточна матриця:");
+            Console.WriteLine(matrix);
+
+            try
+            {
+                Console.Write("Введіть номер рядка (0-based, або -1 для виходу): ");
+                int row = int.Parse(Console.ReadLine());
+                if (row == -1) break;
+
+                Console.Write("Введіть номер стовпця (0-based): ");
+                int col = int.Parse(Console.ReadLine());
+
+                Console.Write("Введіть нове значення: ");
+                double value = double.Parse(Console.ReadLine());
+
+                matrix[row, col] = value; // Зміна значення в матриці
+
+                Console.WriteLine("\nЕлемент успішно змінено.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Помилка: {ex.Message}");
+            }
+        }
+    }
+
 }

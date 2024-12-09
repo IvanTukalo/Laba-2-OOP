@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using static MyMatrix;
 
 partial class Program
 {
@@ -24,6 +25,8 @@ partial class Program
         Console.WriteLine("4 - Транспонувати другу матрицю");
         Console.WriteLine("5 - Обчислити визначник першої матриці");
         Console.WriteLine("6 - Обчислити визначник другої матриці");
+        Console.WriteLine("7 - Змінити значення першої матриці");
+        Console.WriteLine("8 - Змінити значення другої матриці");
         Console.WriteLine("0 - Вихід");
 
         while (true)
@@ -59,8 +62,16 @@ partial class Program
                         Console.WriteLine("\nВизначник другої матриці:");
                         Console.WriteLine(matrix2.CalcDeterminant());
                         break;
+                    case "7":
+                        Console.WriteLine("\nЗміна значення у першій матриці:");
+                        ModifyMatrix(matrix1);
+                        break;
+                    case "8":
+                        Console.WriteLine("\nЗміна значення у другій матриці:");
+                        ModifyMatrix(matrix2);
+                        break;
                     case "0":
-                        Console.WriteLine("\nДякуємо за користування програмою!");
+                        Console.WriteLine("\nЗавершую...");
                         return;
                     default:
                         Console.WriteLine("Некоректний вибір. Спробуйте ще раз.");
@@ -107,11 +118,9 @@ partial class Program
     {
         MyTime t1 = GetTime("t1");
         MyTime t2 = GetTime("t2");
-        MyTime now = GetTime("now");
 
         Console.WriteLine($"t1: {t1}");
         Console.WriteLine($"t2: {t2}");
-        Console.WriteLine($"now: {now}");
 
         Console.WriteLine("Час t1: " + t1);
         Console.WriteLine("Час t2: " + t2);
@@ -145,7 +154,7 @@ partial class Program
             Console.WriteLine($"Випадковий вибір: {totalSeconds} секунд");
         }
         Console.WriteLine("t1 + " + totalSeconds + " секунд: " + t1.AddSeconds(totalSeconds));
-        Console.WriteLine("Зараз: " + now + " - " + MyTime.WhatLesson(now));
+        Console.WriteLine(MyTime.WhatLesson());
     }
 
     static MyTime GetTime(string label)
@@ -208,17 +217,19 @@ partial class Program
             return new MyTime(h, m, s);
         }
 
-        public static int TimeSinceMidnight(MyTime t)
+        // Нестатичний метод для обчислення секунд з початку доби
+        public int TimeSinceMidnight()
         {
-            return t.Hour * 3600 + t.Minute * 60 + t.Second;
+            return Hour * 3600 + Minute * 60 + Second;
         }
 
+        // Статичний метод залишаємо для сумісності
         public static MyTime TimeSinceMidnight(int seconds)
         {
             const int secPerDay = 86400;
             seconds %= secPerDay;
             if (seconds < 0) seconds += secPerDay;
-
+            
             int h = seconds / 3600;
             int m = (seconds / 60) % 60;
             int s = seconds % 60;
@@ -232,42 +243,45 @@ partial class Program
 
         public MyTime AddSeconds(int seconds)
         {
-            int totalSeconds = TimeSinceMidnight(this) + seconds;
+            int totalSeconds = TimeSinceMidnight() + seconds;
             return TimeSinceMidnight(totalSeconds);
         }
 
         public static int Difference(MyTime t1, MyTime t2)
         {
-            return TimeSinceMidnight(t1) - TimeSinceMidnight(t2);
+            return t1.TimeSinceMidnight() - t2.TimeSinceMidnight();
         }
 
-        public static string WhatLesson(MyTime t)
+        public static string WhatLesson()
         {
-            int totalSeconds = TimeSinceMidnight(t);
+            MyTime now = GetTime("now");
+            Console.WriteLine($"Зараз: {now}");
 
-            if (totalSeconds < TimeSinceMidnight(new MyTime(8, 0, 0)))
+            int totalSeconds = now.TimeSinceMidnight();
+
+            if (totalSeconds < new MyTime(8, 0, 0).TimeSinceMidnight())
                 return "Пари ще не почалися";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(9, 20, 0)))
+            else if (totalSeconds < new MyTime(9, 20, 0).TimeSinceMidnight())
                 return "1-а пара";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(9, 40, 0)))
+            else if (totalSeconds < new MyTime(9, 40, 0).TimeSinceMidnight())
                 return "Перерва між 1-ю та 2-ю парами";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(11, 0, 0)))
+            else if (totalSeconds < new MyTime(11, 0, 0).TimeSinceMidnight())
                 return "2-а пара";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(11, 20, 0)))
+            else if (totalSeconds < new MyTime(11, 20, 0).TimeSinceMidnight())
                 return "Перерва між 2-ю та 3-ю парами";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(12, 40, 0)))
+            else if (totalSeconds < new MyTime(12, 40, 0).TimeSinceMidnight())
                 return "3-я пара";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(13, 0, 0)))
+            else if (totalSeconds < new MyTime(13, 0, 0).TimeSinceMidnight())
                 return "Перерва між 3-ю та 4-ю парами";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(14, 20, 0)))
+            else if (totalSeconds < new MyTime(14, 20, 0).TimeSinceMidnight())
                 return "4-а пара";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(15, 40, 0)))
+            else if (totalSeconds < new MyTime(15, 40, 0).TimeSinceMidnight())
                 return "Перерва між 4-ю та 5-ю парами";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(16, 0, 0)))
+            else if (totalSeconds < new MyTime(16, 0, 0).TimeSinceMidnight())
                 return "5-а пара";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(16, 20, 0)))
+            else if (totalSeconds < new MyTime(16, 20, 0).TimeSinceMidnight())
                 return "Перерва між 5-ю та 6-ю парами";
-            else if (totalSeconds < TimeSinceMidnight(new MyTime(17, 40, 0)))
+            else if (totalSeconds < new MyTime(17, 40, 0).TimeSinceMidnight())
                 return "6-а пара";
             else
                 return "Пари вже скінчилися";
