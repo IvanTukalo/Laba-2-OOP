@@ -154,7 +154,8 @@ partial class Program
             Console.WriteLine($"Випадковий вибір: {totalSeconds} секунд");
         }
         Console.WriteLine("t1 + " + totalSeconds + " секунд: " + t1.AddSeconds(totalSeconds));
-        Console.WriteLine(MyTime.WhatLesson());
+        // Виклик нестатичного методу WhatLesson() для t1
+        Console.WriteLine("Зараз(t1): " + t1.WhatLesson());
     }
 
     static MyTime GetTime(string label)
@@ -229,7 +230,7 @@ partial class Program
             const int secPerDay = 86400;
             seconds %= secPerDay;
             if (seconds < 0) seconds += secPerDay;
-            
+
             int h = seconds / 3600;
             int m = (seconds / 60) % 60;
             int s = seconds % 60;
@@ -252,12 +253,9 @@ partial class Program
             return t1.TimeSinceMidnight() - t2.TimeSinceMidnight();
         }
 
-        public static string WhatLesson()
+        public string WhatLesson()
         {
-            MyTime now = GetTime("now");
-            Console.WriteLine($"Зараз: {now}");
-
-            int totalSeconds = now.TimeSinceMidnight();
+            int totalSeconds = this.TimeSinceMidnight(); // Використовуємо час поточного екземпляра
 
             if (totalSeconds < new MyTime(8, 0, 0).TimeSinceMidnight())
                 return "Пари ще не почалися";
@@ -286,43 +284,45 @@ partial class Program
             else
                 return "Пари вже скінчилися";
         }
-    }
-    static void Main(string[] args)
-    {
-        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-        Console.OutputEncoding = UTF8Encoding.UTF8;
-        Console.ForegroundColor = ConsoleColor.Black;
-        Console.BackgroundColor = ConsoleColor.White;
-        Console.Clear();
-        int choice;
-        do
+
+        static void Main(string[] args)
         {
-            Console.WriteLine("-Для виконання блоку 1 - MyMatrix");
-            Console.WriteLine("-Для виконання блоку 2 - my_time ООП");
-
-            choice = int.Parse(Console.ReadLine());
-
-            switch (choice)
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            Console.OutputEncoding = UTF8Encoding.UTF8;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Clear();
+            int choice;
+            do
             {
-                case 1:
-                    Console.WriteLine("Виконую блок 1 - MyMatrix");
-                    DoBlock_1();
-                    Console.WriteLine();
-                    break;
-                case 2:
-                    Console.WriteLine("Виконую блок 2 - my_time ООП");
-                    DoBlock_2();
-                    Console.WriteLine();
-                    break;
-                case 0:
-                    Console.WriteLine("Зараз завершимо, тільки натисніть будь ласка ще раз Enter");
-                    Console.ReadLine();
-                    break;
-                default:
-                    Console.WriteLine("Команда ``{0}'' не розпізнана. Зробіь, будь ласка, вибір із 1, 2 і 0.", choice);
-                    Console.WriteLine();
-                    break;
-            }
-        } while (choice != 0);
+                Console.WriteLine("-Для виконання блоку 1 - MyMatrix");
+                Console.WriteLine("-Для виконання блоку 2 - my_time ООП");
+
+                choice = int.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("Виконую блок 1 - MyMatrix");
+                        DoBlock_1();
+                        Console.WriteLine();
+                        break;
+                    case 2:
+                        Console.WriteLine("Виконую блок 2 - my_time ООП");
+                        DoBlock_2();
+                        Console.WriteLine();
+                        break;
+                    case 0:
+                        Console.WriteLine("Зараз завершимо, тільки натисніть будь ласка ще раз Enter");
+                        Console.ReadLine();
+                        break;
+                    default:
+                        Console.WriteLine("Команда ``{0}'' не розпізнана. Зробіь, будь ласка, вибір із 1, 2 і 0.", choice);
+                        Console.WriteLine();
+                        break;
+                }
+            } while (choice != 0);
+        }
     }
 }
+    
